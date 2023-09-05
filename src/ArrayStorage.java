@@ -54,23 +54,26 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int index = -1;
+//        int index = -1;
         if (uuid != null) {
             for (int i = 0; i < countResumes; i++) {
                 if (uuid.equals(storage[i].uuid)) {
-                    index = i;
+//                    index = i;
+                    storage[i] = storage[countResumes - 1];
+                    storage[countResumes - 1] = null;
+                    countResumes--;
                 }
             }
         }
 
-        if (index != -1) {
-//            for (int i = index; i < countResumes; i++) {
-//                storage[i] = storage[i + 1];
-//            }
-            storage[index] = storage[countResumes - 1];
-            storage[countResumes - 1] = null;
-            countResumes--;
-        }
+//        if (index != -1) {
+////            for (int i = index; i < countResumes; i++) {
+////                storage[i] = storage[i + 1];
+////            }
+//            storage[index] = storage[countResumes - 1];
+//            storage[countResumes - 1] = null;
+//            countResumes--;
+//        }
 
     }
 
