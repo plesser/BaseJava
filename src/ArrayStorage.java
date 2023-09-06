@@ -5,7 +5,6 @@ public class ArrayStorage {
     static final int CAPACITY = 10000;
     Resume[] storage = new Resume[CAPACITY];
     int countResumes = 0;
-//    static final double SCALE = 0.75;
 
     void clear() {
         //storage = new Resume[CAPACITY];
@@ -29,13 +28,6 @@ public class ArrayStorage {
         }
 
         if (index == -1) {
-//            if (countResumes > (int) (storage.length * SCALE)) {
-//                System.out.println("resize storage " + storage.length * 2);
-//                Resume[] tempStorage = new Resume[countResumes];
-//                System.arraycopy(storage, 0, tempStorage, 0, countResumes);
-//                storage = new Resume[storage.length * 2];
-//                System.arraycopy(tempStorage, 0, storage, 0, countResumes);
-//            }
             storage[countResumes] = r;
             countResumes++;
         }
@@ -62,19 +54,10 @@ public class ArrayStorage {
                     storage[i] = storage[countResumes - 1];
                     storage[countResumes - 1] = null;
                     countResumes--;
+                    break;
                 }
             }
         }
-
-//        if (index != -1) {
-////            for (int i = index; i < countResumes; i++) {
-////                storage[i] = storage[i + 1];
-////            }
-//            storage[index] = storage[countResumes - 1];
-//            storage[countResumes - 1] = null;
-//            countResumes--;
-//        }
-
     }
 
     /**
