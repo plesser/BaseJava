@@ -27,7 +27,7 @@ public class ArrayStorage {
             }
         }
 
-        if (index == -1) {
+        if (index == -1 && countResumes <= storage.length) {
             storage[countResumes] = r;
             countResumes++;
         }
