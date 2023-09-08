@@ -50,9 +50,10 @@ public class MainArray {
                 case "update":
                     r = new Resume();
                     r.uuid = uuid;
-                    r.name = "uuid - " + uuid;
                     ARRAY_STORAGE.save(r);
-                    r.name = "update uuid";
+                    r = ARRAY_STORAGE.get(uuid);
+                    r = new Resume();
+                    r.uuid = uuid;
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;

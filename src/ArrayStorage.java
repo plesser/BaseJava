@@ -14,30 +14,25 @@ public class ArrayStorage {
     }
 
     void update(Resume r) {
-        if (r.uuid == null) {
-            System.out.println("Resume with null uuid");
-            return;
-        }
+        if (resumeIsNull(r)) return;
 
         int index = getIndexResume(r.uuid);
         if (index != -1) {
             storage[index] = r;
         } else {
-            System.out.println("Don't find resume with uuid " + r.uuid);
+            System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.uuid);
         }
 
     }
 
+
     void save(Resume r) {
-        if (r.uuid == null) {
-            System.out.println("Resume with null uuid");
-            return;
-        }
+        if (resumeIsNull(r)) return;
 
         int index = getIndexResume(r.uuid);
 
         if (countResumes == storage.length){
-            System.out.println("storage is full");
+            System.out.println("ERROR: storage is full");
             return;
         }
 
@@ -45,34 +40,35 @@ public class ArrayStorage {
             storage[countResumes] = r;
             countResumes++;
         } else {
-            System.out.println("Resume already exist " + r.uuid);
+            System.out.println("ERROR: Resume already exist " + r.uuid);
         }
     }
 
     Resume get(String uuid) {
-        if (uuid != null) {
-            int index = getIndexResume(uuid);
-            if (index != -1){
-                return storage[index];
-            }
+        if (uuidIsNull(uuid)){
+            return null;
         }
-        System.out.println("Don't find resume with uuid " + uuid);
-        return null;
+        int index = getIndexResume(uuid);
+        if (index != -1){
+            return storage[index];
+        } else {
+            System.out.println("ERROR: Don't find resume with uuid " + uuid);
+            return null;
+        }
     }
 
     void delete(String uuid) {
-//        int index = -1;
-        if (uuid != null) {
-            int index = getIndexResume(uuid);
-            if (index != -1) {
-                storage[index] = storage[countResumes - 1];
-                storage[countResumes - 1] = null;
-                countResumes--;
-            } else {
-                System.out.println("Don't find resume with uuid " + uuid);
-            }
+        if (uuidIsNull(uuid)){
+            return;
+        }
+
+        int index = getIndexResume(uuid);
+        if (index != -1) {
+            storage[index] = storage[countResumes - 1];
+            storage[countResumes - 1] = null;
+            countResumes--;
         } else {
-            System.out.println("Resume with null uuid");
+            System.out.println("ERROR: Don't find resume with uuid " + uuid);
         }
     }
 
@@ -98,6 +94,22 @@ public class ArrayStorage {
             }
         }
         return index;
+    }
+
+    private static boolean resumeIsNull(Resume r) {
+        if (r.uuid == null) {
+            System.out.println("ERROR: Resume with null uuid");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean uuidIsNull(String uuid) {
+        if (uuid == null) {
+            System.out.println("ERROR: Uuid is null");
+            return true;
+        }
+        return false;
     }
 
 }
