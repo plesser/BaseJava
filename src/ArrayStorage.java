@@ -4,7 +4,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    static final int CAPACITY = 20;
+    static final int CAPACITY = 10000;
     Resume[] storage = new Resume[CAPACITY];
     int countResumes = 0;
 
@@ -14,9 +14,8 @@ public class ArrayStorage {
     }
 
     void update(Resume r) {
-        if (resumeIsNull(r)) return;
 
-        int index = getIndexResume(r.uuid);
+        int index = getIndex(r.uuid);
         if (index != -1) {
             storage[index] = r;
         } else {
@@ -27,9 +26,8 @@ public class ArrayStorage {
 
 
     void save(Resume r) {
-        if (resumeIsNull(r)) return;
 
-        int index = getIndexResume(r.uuid);
+        int index = getIndex(r.uuid);
 
         if (countResumes == storage.length){
             System.out.println("ERROR: storage is full");
@@ -45,10 +43,7 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        if (uuidIsNull(uuid)){
-            return null;
-        }
-        int index = getIndexResume(uuid);
+        int index = getIndex(uuid);
         if (index != -1){
             return storage[index];
         } else {
@@ -58,11 +53,8 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        if (uuidIsNull(uuid)){
-            return;
-        }
 
-        int index = getIndexResume(uuid);
+        int index = getIndex(uuid);
         if (index != -1) {
             storage[index] = storage[countResumes - 1];
             storage[countResumes - 1] = null;
@@ -85,31 +77,13 @@ public class ArrayStorage {
         return countResumes;
     }
 
-    private int getIndexResume(String uuid) {
-        int index = -1;
+    private int getIndex(String uuid) {
         for (int i = 0; i < countResumes; i++) {
             if (uuid.equals(storage[i].uuid)) {
-                index = i;
-                break;
+                return i;
             }
         }
-        return index;
-    }
-
-    private static boolean resumeIsNull(Resume r) {
-        if (r.uuid == null) {
-            System.out.println("ERROR: Resume with null uuid");
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean uuidIsNull(String uuid) {
-        if (uuid == null) {
-            System.out.println("ERROR: Uuid is null");
-            return true;
-        }
-        return false;
+        return -1;
     }
 
 }
