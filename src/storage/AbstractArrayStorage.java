@@ -1,12 +1,17 @@
+package storage;
+
+import model.Resume;
+
 import java.util.Arrays;
 
-/**
- * Array based storage for Resumes
- */
-public class ArrayStorage {
-    static final int CAPACITY = 10000;
+public abstract class AbstractArrayStorage implements Storage{
+    static final int CAPACITY = 100000;
     Resume[] storage = new Resume[CAPACITY];
-    int countResumes = 0;
+    public int countResumes = 0;
+
+    abstract void addElement(Resume r);
+    abstract void deleteElement(int index);
+    abstract void updateElement(int index, Resume r);
 
     public void clear() {
         Arrays.fill(storage, null);
@@ -14,23 +19,21 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        int index = getIndex(r.uuid);
+        int index = getIndex(r.getUuid());
         if (index != -1) {
-            storage[index] = r;
+            updateElement(index, r);
         } else {
-            System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.uuid);
+            System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
         }
     }
 
     public void save(Resume r) {
-        int index = getIndex(r.uuid);
         if (countResumes == storage.length){
             System.out.println("ERROR: storage is full");
-        } else if (index == -1 && countResumes <= storage.length) {
-            storage[countResumes] = r;
-            countResumes++;
+        } else if (getIndex(r.getUuid()) == -1 && countResumes <= storage.length) {
+            addElement(r);
         } else {
-            System.out.println("ERROR: Resume already exist " + r.uuid);
+            System.out.println("ERROR: model.Resume already exist " + r.getUuid());
         }
     }
 
@@ -47,9 +50,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index != -1) {
-            storage[index] = storage[countResumes - 1];
-            storage[countResumes - 1] = null;
-            countResumes--;
+            deleteElement(index);
         } else {
             System.out.println("ERROR: Don't find resume with uuid " + uuid);
         }
@@ -68,11 +69,12 @@ public class ArrayStorage {
 
     private int getIndex(String uuid) {
         for (int i = 0; i < countResumes; i++) {
-            if (uuid.equals(storage[i].uuid)) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return i;
             }
         }
         return -1;
     }
+
 
 }
