@@ -55,7 +55,6 @@ public class MainArray {
                     r.setUuid(uuid);
                     ARRAY_STORAGE.save(r);
                     r = ARRAY_STORAGE.get(uuid);
-                    r = new Resume();
                     r.setUuid(uuid);
                     ARRAY_STORAGE.update(r);
                     printAll();
