@@ -14,7 +14,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     void addElement(Resume r) {
         if (countResumes == 0) {
             storage[0] = r;
-            countResumes++;
             return;
         }
 
@@ -41,22 +40,14 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             storage[countResumes] = r;
         }
 
-        countResumes++;
 
     }
 
     @Override
     void deleteElement(int index) {
         System.arraycopy(storage, index + 1, storage, index, countResumes);
-        storage[countResumes] = null;
-        countResumes--;
 
     }
 
-    @Override
-    void updateElement(int index, Resume r) {
-        delete(r.getUuid());
-        save(r);
-    }
 
 }

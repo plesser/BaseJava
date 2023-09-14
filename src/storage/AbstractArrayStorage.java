@@ -6,12 +6,8 @@ import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage{
     static final int CAPACITY = 100000;
-    Resume[] storage = new Resume[CAPACITY];
+    protected Resume[] storage = new Resume[CAPACITY];
     public int countResumes = 0;
-
-    abstract void addElement(Resume r);
-    abstract void deleteElement(int index);
-    abstract void updateElement(int index, Resume r);
 
     public void clear() {
         Arrays.fill(storage, null);
@@ -21,8 +17,7 @@ public abstract class AbstractArrayStorage implements Storage{
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index != -1) {
-            updateElement(index, r);
-        } else {
+            storage[index] = r;        } else {
             System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
         }
     }
@@ -30,8 +25,9 @@ public abstract class AbstractArrayStorage implements Storage{
     public void save(Resume r) {
         if (countResumes == storage.length){
             System.out.println("ERROR: storage is full");
-        } else if (getIndex(r.getUuid()) == -1 && countResumes <= storage.length) {
+        } else if (getIndex(r.getUuid()) == -1) {
             addElement(r);
+            countResumes++;
         } else {
             System.out.println("ERROR: model.Resume already exist " + r.getUuid());
         }
@@ -51,6 +47,8 @@ public abstract class AbstractArrayStorage implements Storage{
         int index = getIndex(uuid);
         if (index != -1) {
             deleteElement(index);
+            storage[countResumes-1] = null;
+            countResumes--;
         } else {
             System.out.println("ERROR: Don't find resume with uuid " + uuid);
         }
@@ -75,6 +73,9 @@ public abstract class AbstractArrayStorage implements Storage{
         }
         return -1;
     }
+
+    abstract void addElement(Resume r);
+    abstract void deleteElement(int index);
 
 
 }

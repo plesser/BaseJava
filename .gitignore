@@ -4,7 +4,7 @@ out/
 !**/src/test/**/out/
 BaseJava.iml
 /.idea
-src/experience/
+/src/experience/
 
 ### Eclipse ###
 .apt_generated
@@ -30,3 +30,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/src/experience/
