@@ -4,7 +4,6 @@ out/
 !**/src/test/**/out/
 BaseJava.iml
 /.idea
-/src/experience/
 
 ### Eclipse ###
 .apt_generated

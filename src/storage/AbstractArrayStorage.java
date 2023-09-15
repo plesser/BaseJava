@@ -16,20 +16,22 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
-        if (index != -1) {
-            storage[index] = r;        } else {
+        if (index > 0) {
+            storage[index] = r;
+        } else {
             System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
         }
     }
 
     public void save(Resume r) {
+        int index = getIndex(r.getUuid());
         if (countResumes == storage.length){
             System.out.println("ERROR: storage is full");
-        } else if (getIndex(r.getUuid()) == -1) {
-            addElement(r);
-            countResumes++;
-        } else {
+        } else if (index >= 0) {
             System.out.println("ERROR: model.Resume already exist " + r.getUuid());
+        } else {
+            addElement(r, index);
+            countResumes++;
         }
     }
 
@@ -65,17 +67,18 @@ public abstract class AbstractArrayStorage implements Storage{
         return countResumes;
     }
 
-    private int getIndex(String uuid) {
-        for (int i = 0; i < countResumes; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return i;
-            }
-        }
-        return -1;
-    }
+//    private int getIndex(String uuid) {
+//        for (int i = 0; i < countResumes; i++) {
+//            if (uuid.equals(storage[i].getUuid())) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
-    abstract void addElement(Resume r);
+
+    abstract void addElement(Resume r, int index);
     abstract void deleteElement(int index);
 
-
+    abstract int getIndex(String uuid);
 }

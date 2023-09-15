@@ -9,7 +9,7 @@ public class ArrayStorage extends AbstractArrayStorage{
 
 
     @Override
-    void addElement(Resume r) {
+    void addElement(Resume r, int index) {
         storage[countResumes] = r;
 
     }
@@ -17,6 +17,16 @@ public class ArrayStorage extends AbstractArrayStorage{
     @Override
     void deleteElement(int index) {
         storage[index] = storage[countResumes - 1];
+    }
+
+    @Override
+    int getIndex(String uuid) {
+        for (int i = 0; i < countResumes; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }
