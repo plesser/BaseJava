@@ -17,23 +17,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             return;
         }
         //Resume[] tempStorage = Arrays.copyOfRange(storage, 0, countResumes);
-        if (index == -1) {
-            // вставить значение слево
-            System.arraycopy(storage, 0, storage, 1, countResumes);
-            storage[0] = r;
-        } else if (index * (-1) -1  < countResumes) {
-            // вставить значение посередине
-            System.arraycopy(storage,
-                    index * (-1) - 1,
-                    storage,
-                    index * (-1),
-                    countResumes - (index) * (-1) + 1);
-            storage[index * (-1) - 1] = r;
-        } else {
-            //вставить значение справа
-            storage[countResumes] = r;
-        }
-
+        int insertIdx = -index - 1;
+        System.arraycopy(storage, insertIdx, storage, insertIdx + 1, countResumes - insertIdx);
+        storage[insertIdx] = r;
 
     }
 
