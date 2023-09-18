@@ -1,11 +1,14 @@
 package storage;
 
+import exception.ExistStorageException;
+import exception.NotExistStorageException;
+import exception.StorageException;
 import model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage{
-    static final int CAPACITY = 100000;
+    public static final int CAPACITY = 100000;
     protected Resume[] storage = new Resume[CAPACITY];
     public int countResumes = 0;
 
@@ -19,16 +22,19 @@ public abstract class AbstractArrayStorage implements Storage{
         if (index > 0) {
             storage[index] = r;
         } else {
-            System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
+            //System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
+            throw new NotExistStorageException(r.getUuid());
         }
     }
 
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (countResumes == storage.length){
-            System.out.println("ERROR: storage is full");
+            //System.out.println("ERROR: storage is full");
+            throw new StorageException("Storage overflow", r.getUuid());
         } else if (index >= 0) {
-            System.out.println("ERROR: model.Resume already exist " + r.getUuid());
+            //System.out.println("ERROR: model.Resume already exist " + r.getUuid());
+            throw new ExistStorageException(r.getUuid());
         } else {
             addElement(r, index);
             countResumes++;
@@ -40,8 +46,8 @@ public abstract class AbstractArrayStorage implements Storage{
         if (index != -1){
             return storage[index];
         } else {
-            System.out.println("ERROR: Don't find resume with uuid " + uuid);
-            return null;
+            //System.out.println("ERROR: Don't find resume with uuid " + uuid);
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -52,7 +58,8 @@ public abstract class AbstractArrayStorage implements Storage{
             storage[countResumes-1] = null;
             countResumes--;
         } else {
-            System.out.println("ERROR: Don't find resume with uuid " + uuid);
+            //System.out.println("ERROR: Don't find resume with uuid " + uuid);
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -66,16 +73,6 @@ public abstract class AbstractArrayStorage implements Storage{
     public int size() {
         return countResumes;
     }
-
-//    private int getIndex(String uuid) {
-//        for (int i = 0; i < countResumes; i++) {
-//            if (uuid.equals(storage[i].getUuid())) {
-//                return i;
-//            }
-//        }
-//        return -1;
-//    }
-
 
     abstract void addElement(Resume r, int index);
     abstract void deleteElement(int index);
