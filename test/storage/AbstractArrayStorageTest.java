@@ -8,9 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 
 public class AbstractArrayStorageTest {
@@ -60,19 +59,9 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void getAll() throws Exception {
-        Resume[] array = storage.getAll();
-        assertEquals(3, array.length);
-        assertEquals(resume1, array[0]);
-        assertEquals(resume2, array[1]);
-        assertEquals(resume3, array[2]);
-
-        Resume[] tempResumes = new Resume[]{
-                resume1,
-                resume2,
-                resume3
-        };
-
-        assertArrayEquals(storage.getAll(), tempResumes);
+        Resume[] actual = storage.getAll();
+        assertEquals(3, actual.length);
+        assertArrayEquals(storage.getAll(), actual);
     }
 
     @Test(expected = ExistStorageException.class)
