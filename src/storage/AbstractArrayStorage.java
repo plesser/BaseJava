@@ -19,6 +19,7 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
+
         if (index > 0) {
             storage[index] = r;
         } else {
@@ -52,13 +53,12 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public void delete(String uuid) {
         int index = getIndex(uuid);
-        if (index != -1) {
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        } else {
             deleteElement(index);
             storage[countResumes-1] = null;
             countResumes--;
-        } else {
-            //System.out.println("ERROR: Don't find resume with uuid " + uuid);
-            throw new NotExistStorageException(uuid);
         }
     }
 
