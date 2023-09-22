@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 
 public class AbstractArrayStorageTest {
-    final private Storage storage;
+    final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private final Resume resume1 = new Resume(UUID_1);
