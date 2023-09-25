@@ -1,63 +1,57 @@
 package storage;
 
+import exception.ExistStorageException;
 import exception.NotExistStorageException;
 import model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractStorage implements Storage{
-    public static final int CAPACITY = 10000;
-    protected Resume[] storage = new Resume[CAPACITY];
-    public int countResumes = 0;
+    protected abstract Object getSearchKey(String uuid);
 
-    public void clear() {
-        Arrays.fill(storage, null);
-        countResumes = 0;
-    }
+    protected abstract void doUpdate(Resume r, Object searchKey);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    protected abstract void doSave(Resume r, Object searchKey);
+
+    protected abstract Resume doGet(Object searchKey);
+
+    protected abstract void doDelete(Object searchKey);
 
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-
-        if (index > 0) {
-            storage[index] = r;
-        } else {
-            //System.out.println("ERROR UPDATE: Don't find resume with uuid " + r.getUuid());
-            throw new NotExistStorageException(r.getUuid());
-        }
+        Object searchKey = getExistedSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0){
-            throw new NotExistStorageException(uuid);
-        } else {
-            return storage[index];
-        }
+    public void save(Resume r) {
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
+    }
+
+    public Resume get(String uuid) {
+        Object searchKey = getExistedSearchKey(uuid);
+        return doGet(searchKey);
+    }
+
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
-        } else {
-            deleteElement(index);
-            storage[countResumes-1] = null;
-            countResumes--;
         }
+        return searchKey;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, countResumes);
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
     }
-
-    public int size() {
-        return countResumes;
-    }
-
-    abstract int getIndex(String uuid);
-    abstract void deleteElement(int index);
-    abstract public void save(Resume r);
 }

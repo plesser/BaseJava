@@ -4,42 +4,60 @@ import exception.ExistStorageException;
 import exception.StorageException;
 import model.Resume;
 
-public class ListStorage extends AbstractStorage{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    public static final double SCALE = 0.75;
+public class ListStorage extends AbstractStorage{
+    private List<Resume> list = new ArrayList<>();
 
     @Override
-    int getIndex(String uuid) {
-        for (int i = 0; i < countResumes; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
-    void deleteElement(int index) {
-        System.arraycopy(storage, index + 1, storage, index, countResumes);
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            //System.out.println("ERROR: model.Resume already exist " + r.getUuid());
-            throw new ExistStorageException(r.getUuid());
-        } else if (countResumes >= storage.length * SCALE){
-            Resume[] tempStorage = new Resume[countResumes];
-            System.arraycopy(
-                    storage, 0, tempStorage, 0, countResumes);
+    protected void doUpdate(Resume r, Object searchKey) {
+        list.set((Integer) searchKey, r);
+    }
 
-            storage = new Resume[storage.length * 2];
-            System.arraycopy(
-                    tempStorage, 0, storage, 0, countResumes);
+    @Override
+    protected void doSave(Resume r, Object searchKey) {
+        list.add(r);
+    }
 
-        }
-        storage[countResumes] = r;
-        countResumes++;
+    @Override
+    protected Resume doGet(Object searchKey) {
+        return list.get((Integer) searchKey);
+    }
+
+    @Override
+    protected void doDelete(Object searchKey) {
+        list.remove(((Integer) searchKey).intValue());
+    }
+
+    @Override
+    public void clear() {
+        list.clear();
+    }
+
+    @Override
+    public Resume[] getAll() {
+        return list.toArray(new Resume[list.size()]);
+    }
+
+    @Override
+    public int size() {
+        return list.size();
     }
 }

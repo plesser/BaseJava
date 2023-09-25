@@ -10,14 +10,16 @@ public class ListStorageTest extends AbstractArrayStorageTest{
         super(new ListStorage());
     }
 
+
     @Test
+    @Override
     public void saveOverflow(){
         storage.clear();
         try {
-            for (int i = 0; i < AbstractArrayStorage.CAPACITY * 2; i++) {
+            for (int i = 0; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
-        } catch (StorageException e){
+        } catch (StorageException e) {
             Assert.fail();
         }
         storage.save(new Resume());
