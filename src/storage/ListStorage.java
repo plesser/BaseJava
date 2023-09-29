@@ -1,15 +1,12 @@
 package storage;
 
-import exception.ExistStorageException;
-import exception.StorageException;
 import model.Resume;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage{
-    private List<Resume> list = new ArrayList<>();
+    final private List<Resume> list = new ArrayList<>();
 
     @Override
     protected Integer getSearchKey(String uuid) {
